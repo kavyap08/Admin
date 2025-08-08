@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>All Products</title>
+  <style>
+    body {
+      background-color: #f7f7f7;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .product-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .product-card {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #222;
+    }
+
+    .product-category {
+      font-size: 14px;
+      color: #777;
+      margin: 5px 0;
+    }
+
+    .product-description {
+      font-size: 14px;
+      color: #444;
+      margin: 10px 0;
+    }
+
+    .product-cost {
+      font-size: 16px;
+      color: #e91e63;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+	<div style="max-width: 600px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+	  <h2 style="text-align:center; color:#e91e63; margin-bottom:20px;">Add New Product</h2>
+	  <form action="/addproduct" method="post" style="display: flex; flex-direction: column; gap: 10px;">
+		<input type="hidden" name="admin_id" th:value="${admin_id}" />
+	    <input type="text" name="name" placeholder="Product Name" required style="padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+
+	    <input type="text" name="type" placeholder="Type (e.g. Ring, Necklace)" required style="padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+	    
+	    <textarea name="description" placeholder="Product Description" rows="3" required style="padding: 10px; border-radius: 8px; border: 1px solid #ccc;"></textarea>
+	    
+	    <input type="number" name="cost" placeholder="Cost (in ₹)" required style="padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+	    
+	    <button type="submit" style="padding: 12px; background-color: #e91e63; color: white; border: none; border-radius: 8px; font-weight: bold;">Add Product</button>
+	  </form>
+	</div>
+
+  <h1>Our Products</h1>
+
+  <div class="product-container">
+    <div class="product-card" th:each="product : ${products}">
+      <div class="product-name" th:text="${product.name}">Product Name</div>
+	  <div class="product-type" th:text="${product.type}">Product Type</div>
+      <div class="product-description" th:text="${product.description}">A beautiful handcrafted ring.</div>
+      <div class="product-cost" th:text="'₹' + ${product.cost}">₹2999</div>
+	  <form th:action="@{/delete-product}" method="POST" style="margin-top: 10px;">
+	                           <input type="hidden" name="product_id" th:value="${product.id}" />
+	                           <input type="hidden" name="admin_id" th:value="${admin_id}" />
+	                           <input type="submit" value="Delete" style="background-color: #dc3545; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer;" />
+	                       </form>
+    </div>
+	
+  </div>
+
+</body>
+</html>
